@@ -49,7 +49,7 @@ While recording, the window stays on top with adjustable opacity. Copy copies th
 
 ## Build
 
-Install Node.js 22 and Rust. Windows requires Visual Studio C++ Build Tools; macOS requires Xcode with the macOS 15 SDK or newer.
+Install Node.js 22 and Rust. Windows requires Visual Studio C++ Build Tools; macOS requires Xcode 26.3 or newer to compile the capture dependency. The resulting app still targets macOS 15 or newer.
 
 ```sh
 npm ci
