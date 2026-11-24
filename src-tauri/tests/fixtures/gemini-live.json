@@ -1,0 +1,195 @@
+{
+  "meeting": [
+    {
+      "voiceActivity": {
+        "type": "ACTIVITY_START",
+        "audioOffset": "0.240s"
+      }
+    },
+    {
+      "serverContent": {
+        "inputTranscription": {
+          "text": "Can you confirm the delivery date for this order?"
+        }
+      }
+    },
+    {
+      "voiceActivity": {
+        "type": "ACTIVITY_END",
+        "audioOffset": "3.760s"
+      }
+    },
+    {
+      "serverContent": {
+        "modelTurn": {
+          "parts": [
+            {
+              "inlineData": {
+                "mimeType": "audio/pcm;rate=24000",
+                "data": "[discarded]"
+              }
+            }
+          ],
+          "role": "model"
+        },
+        "outputTranscription": {
+          "text": "The confirmed delivery date "
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "modelTurn": {
+          "parts": [
+            {
+              "inlineData": {
+                "mimeType": "audio/pcm;rate=24000",
+                "data": "[discarded]"
+              }
+            }
+          ],
+          "role": "model"
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "modelTurn": {
+          "parts": [
+            {
+              "inlineData": {
+                "mimeType": "audio/pcm;rate=24000",
+                "data": "[discarded]"
+              }
+            }
+          ],
+          "role": "model"
+        },
+        "outputTranscription": {
+          "text": "for the sample order"
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "modelTurn": {
+          "parts": [
+            {
+              "inlineData": {
+                "mimeType": "audio/pcm;rate=24000",
+                "data": "[discarded]"
+              }
+            }
+          ],
+          "role": "model"
+        },
+        "outputTranscription": {
+          "text": " is Friday,"
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "modelTurn": {
+          "parts": [
+            {
+              "inlineData": {
+                "mimeType": "audio/pcm;rate=24000",
+                "data": "[discarded]"
+              }
+            }
+          ],
+          "role": "model"
+        },
+        "outputTranscription": {
+          "text": " December 4, 2026."
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "generationComplete": true
+      }
+    },
+    {
+      "serverContent": {
+        "turnComplete": true
+      }
+    }
+  ],
+  "microphone": [
+    {
+      "voiceActivity": {
+        "type": "ACTIVITY_START",
+        "audioOffset": "0.240s"
+      }
+    },
+    {
+      "serverContent": {
+        "interimInputTranscription": {
+          "text": "Can"
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "interimInputTranscription": {
+          "text": "Can you"
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "interimInputTranscription": {
+          "text": "Can you confirm the"
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "interimInputTranscription": {
+          "text": "Can you confirm the delivery date"
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "interimInputTranscription": {
+          "text": "Can you confirm the delivery date for this"
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "interimInputTranscription": {
+          "text": "Can you confirm the delivery date for this order?"
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "interimInputTranscription": {
+          "text": "Can you confirm the delivery date for this order?"
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "inputTranscription": {
+          "text": "Can you confirm the delivery date for this order?"
+        }
+      }
+    },
+    {
+      "serverContent": {
+        "generationComplete": true
+      }
+    },
+    {
+      "voiceActivity": {
+        "type": "ACTIVITY_END",
+        "audioOffset": "3.680s"
+      }
+    }
+  ]
+}

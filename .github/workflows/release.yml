@@ -1,0 +1,95 @@
+name: Release desktop apps
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows
+            runner: windows-latest
+            target: x86_64-pc-windows-msvc
+            bundle: nsis
+          - platform: macos
+            runner: macos-15
+            target: universal-apple-darwin
+            bundle: dmg
+    runs-on: ${{ matrix.runner }}
+    env:
+      MACOSX_DEPLOYMENT_TARGET: '15.0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Prepare Rust
+        shell: bash
+        run: rustup update stable --no-self-update
+      - name: Add macOS targets
+        if: runner.os == 'macOS'
+        run: rustup target add aarch64-apple-darwin x86_64-apple-darwin
+      - run: npm ci
+      - name: Read release version
+        id: version
+        shell: bash
+        run: |
+          tag="v$(node -p "require('./package.json').version")"
+          if [ "$GITHUB_REF_TYPE" = tag ] && [ "$GITHUB_REF_NAME" != "$tag" ]; then
+            echo "Tag must match the package version: $tag" >&2
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "RELEASE_TAG=$tag" >> "$GITHUB_ENV"
+      - run: npm test
+      - name: Test Rust without recording runner audio
+        run: cargo test --locked --manifest-path src-tauri/Cargo.toml -- --skip windows_capture_delivers_pcm_and_stops
+      - name: Build native app
+        run: npm run tauri -- build --target ${{ matrix.target }} --bundles ${{ matrix.bundle }}
+      - name: Collect Windows packages
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory release-assets
+          Copy-Item src-tauri/target/x86_64-pc-windows-msvc/release/meeting-copilot.exe "release-assets/Meeting-Copilot-$env:RELEASE_TAG-windows-x64.exe"
+          $installer = Get-ChildItem src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/*.exe
+          Copy-Item $installer.FullName "release-assets/Meeting-Copilot-$env:RELEASE_TAG-windows-x64-setup.exe"
+      - name: Collect macOS package
+        if: runner.os == 'macOS'
+        run: |
+          mkdir release-assets
+          cp src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg "release-assets/Meeting-Copilot-$RELEASE_TAG-macos-universal.dmg"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.platform }}
+          path: release-assets/
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-*
+          merge-multiple: true
+          path: release-assets/
+      - name: Publish tagged release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.build.outputs.tag }}
+        run: |
+          gh release create "$RELEASE_TAG" release-assets/* --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "Meeting Copilot $RELEASE_TAG" --notes-file RELEASE_NOTES.md
